@@ -14,6 +14,11 @@ public class Engine : MonoBehaviour
     [SerializeField] private AudioClip engineLoopClip;
     [SerializeField] private AudioClip engineStopClip;
     
+    [Header("Lights")]
+    [SerializeField] private GameObject[] lights;
+    
+    private bool[] lightStates;
+    
     public static bool isEngineRunning = false;
     
     private void OnEnable()
@@ -26,6 +31,8 @@ public class Engine : MonoBehaviour
 
         engineOn.Enable();
         engineOff.Enable();
+        
+        lightStates = new bool[lights.Length];
     }
 
     private void OnDisable()
@@ -49,6 +56,11 @@ public class Engine : MonoBehaviour
         audioSource.Play();
         
         Invoke(nameof(PlayLoopingEngineSound), engineStartClip.length);
+        
+        for (int i = 0; i < lights.Length; i++)
+        {
+            lights[i].SetActive(lightStates[i]);
+        }
     }
     
     private void PlayLoopingEngineSound()
@@ -65,6 +77,12 @@ public class Engine : MonoBehaviour
         if (!isEngineRunning) return;
         
         isEngineRunning = false;
+
+        for (int i = 0; i < lights.Length; i++)
+        {
+            lightStates[i] = lights[i].activeSelf;
+            lights[i].SetActive(false);
+        }
         
         audioSource.Stop();
         audioSource.loop = false;
