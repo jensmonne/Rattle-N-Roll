@@ -3,6 +3,8 @@ using UnityEngine.InputSystem;
 
 public class CarController : MonoBehaviour
 {
+    [SerializeField] private Transform steeringWheel;
+    
     [Header("Input Actions")]
     [SerializeField] private InputActionReference accelerateInput;
     [SerializeField] private InputActionReference brakeInput;
@@ -21,6 +23,7 @@ public class CarController : MonoBehaviour
     [SerializeField] private float[] gearRatios = { 0f, -0.5f, 0.4f, 0.7f, 1.0f };
     [SerializeField] private float maxMotorTorque = 1500f;
     [SerializeField] private float maxSteerAngle = 30f;
+    [SerializeField] private float maxWheelRotation = 90f;
     
     private int currentGearIndex = 0;
     
@@ -53,6 +56,8 @@ public class CarController : MonoBehaviour
         accelInput = accelerateInput.action.ReadValue<float>();
         brakeInputValue = brakeInput.action.ReadValue<float>();
 
+        float visualRotation = steerInput * maxWheelRotation * 0.5f;
+        steeringWheel.localRotation = Quaternion.Euler(0f, 0f, -visualRotation);
         float steerAngle = steerInput * maxSteerAngle;
         frontLeftWheel.steerAngle = steerAngle;
         frontRightWheel.steerAngle = steerAngle;
