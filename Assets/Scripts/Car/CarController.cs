@@ -4,11 +4,15 @@ using UnityEngine.InputSystem;
 public class CarController : MonoBehaviour
 {
     [SerializeField] private Transform steeringWheel;
+    [SerializeField] private DashBoardController dashController;
+    [SerializeField] private AudioSource grindingAudioSource;
+    [SerializeField] private AudioClip gearGrindClip;
     
     [Header("Input Actions")]
     [SerializeField] private InputActionReference accelerateInput;
     [SerializeField] private InputActionReference brakeInput;
     [SerializeField] private InputActionReference steeringInput;
+    [SerializeField] private InputActionReference clutchInput;
     
     [Tooltip("Index 0 = Neutral, 1 = Reverse, 2 = 1st, 3 = 2nd, 4 = 3rd")]
     [SerializeField] private InputActionReference[] gearShiftInputs;
@@ -26,6 +30,10 @@ public class CarController : MonoBehaviour
     [SerializeField] private float maxWheelRotation = 90f;
     
     private int currentGearIndex = 0;
+    private int previousGearIndex = 0;
+    private int attemptedGearIndex = -1;
+    private bool clutchIn = false;
+    private bool isGrinding = false;
     
     private float steerInput;
     private float accelInput;
@@ -33,6 +41,8 @@ public class CarController : MonoBehaviour
     
     private void OnEnable()
     {
+        clutchInput.action.performed += _ => clutchIn = !clutchIn;
+        
         for (int i = 0; i < gearShiftInputs.Length; i++)
         {
             gearShiftInputs[i].action.Enable();
@@ -43,6 +53,8 @@ public class CarController : MonoBehaviour
 
     private void OnDisable()
     {
+        clutchInput.action.performed -= _ => clutchIn = !clutchIn;
+        
         for (int i = 0; i < gearShiftInputs.Length; i++)
         {
             gearShiftInputs[i].action.performed -= ctx => SetGear(i);
@@ -52,6 +64,10 @@ public class CarController : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (!Engine.isEngineRunning) return;
+
+        if (isGrinding) return;
+        
         steerInput = steeringInput.action.ReadValue<float>();
         accelInput = accelerateInput.action.ReadValue<float>();
         brakeInputValue = brakeInput.action.ReadValue<float>();
@@ -80,8 +96,31 @@ public class CarController : MonoBehaviour
             Debug.LogWarning("Invalid gear index");
             return;
         }
+        
+        if (!Engine.isEngineRunning) return;
+        
+        if (!clutchIn && !isGrinding)
+        {
+            attemptedGearIndex = gearIndex;
+            PlayGrindingSound();
+            return;
+        }
+        
+        // NOTE: this shit has to be checked, i cant get a steering wheel outta my ass so have to check at school 
+        if (isGrinding && clutchIn && gearIndex == attemptedGearIndex)
+        {
+            StopGrindingSound();
+        }
+        
+        if (isGrinding && (gearIndex == previousGearIndex || gearIndex == 0))
+        {
+            StopGrindingSound();
+        }
 
+        previousGearIndex = currentGearIndex;
         currentGearIndex = gearIndex;
+        attemptedGearIndex = -1;
+        dashController.SetGearMessage(GearLabel(currentGearIndex));
         Debug.Log($"Gear changed to: {GearLabel(currentGearIndex)}");
     }
 
@@ -96,5 +135,25 @@ public class CarController : MonoBehaviour
             4 => "3rd",
             _ => "Unknown"
         };
+    }
+
+    private void PlayGrindingSound()
+    {
+        if (grindingAudioSource && gearGrindClip)
+        {
+            grindingAudioSource.clip = gearGrindClip;
+            grindingAudioSource.loop = true;
+            grindingAudioSource.Play();
+            isGrinding = true;
+        }
+    }
+
+    private void StopGrindingSound()
+    {
+        if (grindingAudioSource && grindingAudioSource.isPlaying)
+        {
+            grindingAudioSource.Stop();
+            isGrinding = false;
+        }
     }
 }
