@@ -27,7 +27,7 @@ public class CarController : MonoBehaviour
     [SerializeField] private float[] gearRatios = { 0f, -0.5f, 0.4f, 0.7f, 1.0f };
     [SerializeField] private float maxMotorTorque = 1500f;
     [SerializeField] private float maxSteerAngle = 30f;
-    [SerializeField] private float maxWheelRotation = 90f;
+    [SerializeField] private float maxWheelRotation = 420f;
     
     private int currentGearIndex = 0;
     private int previousGearIndex = 0;
@@ -73,7 +73,7 @@ public class CarController : MonoBehaviour
         brakeInputValue = brakeInput.action.ReadValue<float>();
 
         float visualRotation = steerInput * maxWheelRotation * 0.5f;
-        steeringWheel.localRotation = Quaternion.Euler(0f, 0f, -visualRotation);
+        steeringWheel.localRotation = Quaternion.Euler(0f, -visualRotation, 0f);
         float steerAngle = steerInput * maxSteerAngle;
         frontLeftWheel.steerAngle = steerAngle;
         frontRightWheel.steerAngle = steerAngle;
