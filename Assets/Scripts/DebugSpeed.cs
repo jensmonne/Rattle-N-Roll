@@ -14,6 +14,6 @@ public class DebugSpeed : MonoBehaviour
         
         currentSpeed = carRigidbody.linearVelocity.magnitude * 3.6f;
         
-        speedText.text = $"{currentSpeed:F2} km/h";
+        speedText.text = $"{currentSpeed:F2}";
     }
 }
