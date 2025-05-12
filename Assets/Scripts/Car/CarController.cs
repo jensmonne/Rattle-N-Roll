@@ -31,10 +31,10 @@ public class CarController : MonoBehaviour
     [SerializeField] private float maxWheelRotation = 420f;
     
     private int currentGearIndex = 0;
-    private int previousGearIndex = 0;
-    private int attemptedGearIndex = -1;
-    private bool clutchIn = false;
-    private bool isGrinding = false;
+    //private int previousGearIndex = 0;
+    //private int attemptedGearIndex = -1;
+    //private bool clutchIn = false;
+    //private bool isGrinding = false;
     
     private float steerInput;
     private float accelInput;
@@ -51,7 +51,7 @@ public class CarController : MonoBehaviour
     
     private void OnEnable()
     {
-        clutchInput.action.performed += _ => clutchIn = !clutchIn;
+        //clutchInput.action.performed += _ => clutchIn = !clutchIn;
         
         for (int i = 0; i < gearShiftInputs.Length; i++)
         {
@@ -63,7 +63,7 @@ public class CarController : MonoBehaviour
 
     private void OnDisable()
     {
-        clutchInput.action.performed -= _ => clutchIn = !clutchIn;
+        //clutchInput.action.performed -= _ => clutchIn = !clutchIn;
         
         for (int i = 0; i < gearShiftInputs.Length; i++)
         {
@@ -76,7 +76,7 @@ public class CarController : MonoBehaviour
     {
         if (!Engine.isEngineRunning) return;
 
-        if (isGrinding) return;
+        //if (isGrinding) return;
         
         steerInput = steeringInput.action.ReadValue<float>();
         accelInput = accelerateInput.action.ReadValue<float>();
@@ -109,7 +109,7 @@ public class CarController : MonoBehaviour
         
         if (!Engine.isEngineRunning) return;
         
-        if (!clutchIn && !isGrinding)
+        /*if (!clutchIn && !isGrinding)
         {
             attemptedGearIndex = gearIndex;
             PlayGrindingSound();
@@ -127,9 +127,9 @@ public class CarController : MonoBehaviour
             StopGrindingSound();
         }
 
-        previousGearIndex = currentGearIndex;
+        previousGearIndex = currentGearIndex;*/
         currentGearIndex = gearIndex;
-        attemptedGearIndex = -1;
+        //attemptedGearIndex = -1;
         dashController.SetGearMessage(GearLabel(currentGearIndex));
         Debug.Log($"Gear changed to: {GearLabel(currentGearIndex)}");
     }
@@ -147,7 +147,7 @@ public class CarController : MonoBehaviour
         };
     }
 
-    private void PlayGrindingSound()
+    /*private void PlayGrindingSound()
     {
         if (grindingAudioSource && gearGrindClip)
         {
@@ -165,5 +165,5 @@ public class CarController : MonoBehaviour
             grindingAudioSource.Stop();
             isGrinding = false;
         }
-    }
+    }*/
 }
