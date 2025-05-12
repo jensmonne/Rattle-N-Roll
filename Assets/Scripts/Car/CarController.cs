@@ -83,7 +83,7 @@ public class CarController : MonoBehaviour
         brakeInputValue = brakeInput.action.ReadValue<float>();
 
         float visualRotation = steerInput * maxWheelRotation * 0.5f;
-        steeringWheel.localRotation = Quaternion.Euler(0f, -visualRotation, 0f);
+        steeringWheel.localRotation = Quaternion.Euler(0f, 0f, -visualRotation);
         float steerAngle = steerInput * maxSteerAngle;
         frontLeftWheel.steerAngle = steerAngle;
         frontRightWheel.steerAngle = steerAngle;
