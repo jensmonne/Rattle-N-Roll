@@ -9,6 +9,8 @@ public class YawStartButton : MonoBehaviour
     private InputAction yawOn;
     private InputAction yawOff;
 
+    private bool disableCanRun = false;
+
     private void OnEnable()
     {
         yawOn = inputActions.FindActionMap("SwitchPanel").FindAction("AlternatorOn");
@@ -32,18 +34,46 @@ public class YawStartButton : MonoBehaviour
 
     private void OnYawOn(InputAction.CallbackContext context)
     {
-        YawController.Instance().StartDevice(
+        /*YawController.Instance().StartDevice(
             () => Debug.Log("Started successfully"),
             (error) => Debug.LogError("Failed to start device: " + error)
-        );
+        );*/
+        
+        if (YawController.Instance().State == ControllerState.Connected)
+        {
+            YawController.Instance().StartDevice(
+                () => Debug.Log("Yaw started"),
+                error => Debug.LogError("Failed to start device: " + error)
+            );
+        }
+        else
+        {
+            Debug.LogWarning("Yaw not in a ready-to-start state: " + YawController.Instance().State);
+        }
+        
+        disableCanRun = true;
     }
     
     private void OnYawOff(InputAction.CallbackContext context)
     {
-        YawController.Instance().StopDevice(
+        if (!disableCanRun) return;
+        
+        if (YawController.Instance().State == ControllerState.Started)
+        {
+            YawController.Instance().StopDevice(
+                true,
+                () => Debug.Log("Yaw stopped"),
+                error => Debug.LogError("Failed to stop device: " + error)
+            );
+        }
+        else
+        {
+            Debug.LogWarning("Yaw not in a running state: " + YawController.Instance().State);
+        }
+        /*YawController.Instance().StopDevice(
             park: true,
             onSuccess: () => Debug.Log("Device stopped successfully"),
             onError: error => Debug.LogError("Failed to stop device: " + error)
-        );
+        );*/
     }
 }

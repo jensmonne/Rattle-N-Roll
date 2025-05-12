@@ -10,4 +10,10 @@ public class DebugYaw : MonoBehaviour
             (error) => Debug.LogError("Failed to start device: " + error)
         );
     }
+
+    public void CheckState()
+    {
+        var currentState = YawController.Instance().State;
+        Debug.Log(currentState);
+    }
 }
