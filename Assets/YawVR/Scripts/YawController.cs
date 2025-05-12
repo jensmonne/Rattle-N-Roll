@@ -629,7 +629,7 @@ namespace YawVR {
                     break;
                 case CommandIds.GET_STATE:
                     string statestring = Encoding.ASCII.GetString(data, 2, data.Length - 2).Trim();
-                    DeviceState newState = DeviceState.STOPPED;
+                    DeviceState newState = DeviceState.STARTED;
                     switch (statestring) {
                         case "disabled":
                             newState = DeviceState.STOPPED;
