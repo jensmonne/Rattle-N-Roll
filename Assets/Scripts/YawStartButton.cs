@@ -34,11 +34,6 @@ public class YawStartButton : MonoBehaviour
 
     private void OnYawOn(InputAction.CallbackContext context)
     {
-        /*YawController.Instance().StartDevice(
-            () => Debug.Log("Started successfully"),
-            (error) => Debug.LogError("Failed to start device: " + error)
-        );*/
-        
         if (YawController.Instance().State == ControllerState.Connected)
         {
             YawController.Instance().StartDevice(
@@ -70,10 +65,5 @@ public class YawStartButton : MonoBehaviour
         {
             Debug.LogWarning("Yaw not in a running state: " + YawController.Instance().State);
         }
-        /*YawController.Instance().StopDevice(
-            park: true,
-            onSuccess: () => Debug.Log("Device stopped successfully"),
-            onError: error => Debug.LogError("Failed to stop device: " + error)
-        );*/
     }
 }
