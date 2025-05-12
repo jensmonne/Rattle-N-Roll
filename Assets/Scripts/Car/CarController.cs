@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using YawVR;
 
 public class CarController : MonoBehaviour
 {
@@ -38,6 +39,15 @@ public class CarController : MonoBehaviour
     private float steerInput;
     private float accelInput;
     private float brakeInputValue;
+    
+    private void LateUpdate()
+    {
+        if (YawController.Instance() != null)
+        {
+            // Make the car's transform the input for the Yaw motion
+            YawController.Instance().TrackerObject.transform.rotation = transform.rotation;
+        }
+    }
     
     private void OnEnable()
     {
