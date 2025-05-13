@@ -34,6 +34,7 @@ public class EmergencyHandler : MonoBehaviour
     {
         if (YawController.Instance() == null || YawController.Instance().State == ControllerState.Stopping)
         {
+            StartEmergencyEffects();
             Debug.LogWarning("Yaw is not running. Emergency stop skipped.");
             if (quitAfter) Application.Quit();
             return;
@@ -45,13 +46,11 @@ public class EmergencyHandler : MonoBehaviour
             park: false,
             onSuccess: () =>
             {
-                StopEmergencyEffects();
                 Debug.Log("Yaw emergency-stopped (ABORT)");
                 if (quitAfter) Application.Quit();
             },
             onError: error =>
             {
-                StopEmergencyEffects();
                 Debug.LogError("Emergency stop failed: " + error);
                 if (quitAfter) Application.Quit();
             }
