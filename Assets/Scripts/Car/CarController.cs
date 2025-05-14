@@ -6,14 +6,14 @@ public class CarController : MonoBehaviour
 {
     [SerializeField] private Transform steeringWheel;
     [SerializeField] private DashBoardController dashController;
-    [SerializeField] private AudioSource grindingAudioSource;
-    [SerializeField] private AudioClip gearGrindClip;
+    //[SerializeField] private AudioSource grindingAudioSource;
+    //[SerializeField] private AudioClip gearGrindClip;
     
     [Header("Input Actions")]
     [SerializeField] private InputActionReference accelerateInput;
     [SerializeField] private InputActionReference brakeInput;
     [SerializeField] private InputActionReference steeringInput;
-    [SerializeField] private InputActionReference clutchInput;
+    //[SerializeField] private InputActionReference clutchInput;
     
     [Tooltip("Index 0 = Neutral, 1 = Reverse, 2 = 1st, 3 = 2nd, 4 = 3rd")]
     [SerializeField] private InputActionReference[] gearShiftInputs;
@@ -30,7 +30,7 @@ public class CarController : MonoBehaviour
     [SerializeField] private float maxSteerAngle = 30f;
     [SerializeField] private float maxWheelRotation = 420f;
     
-    private int currentGearIndex = 0;
+    [SerializeField] private int currentGearIndex = 0;
     //private int previousGearIndex = 0;
     //private int attemptedGearIndex = -1;
     //private bool clutchIn = false;

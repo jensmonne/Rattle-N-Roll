@@ -227,7 +227,7 @@ namespace YawVR {
             if (connectType == ConnectType.CONNECT_FIRST_FOUND_DEVICE) AutoConnectFirst();
 
             if(connectType == ConnectType.DEBUG_CONNECT_TO_IP) {
-                ConnectToDevice(new YawDevice(IPAddress.Parse(debug_ipAddress),DeviceType.YAW1,50020,50010,"001","DEBUG",DeviceStatus.Available),
+                ConnectToDevice(new YawDevice(IPAddress.Parse(debug_ipAddress),DeviceType.YAW3,50020,50010,"001","DEBUG",DeviceStatus.Available),
                     null,null
                     );
             }
@@ -432,8 +432,7 @@ namespace YawVR {
         /// This function handles the incoming UDP packages from the yawDevice
         /// </summary>
         public void DidRecieveUDPMessage(string message, IPEndPoint remoteEndPoint) {
-
-             //Console.WriteLine(message);
+            Debug.LogError("RAW UDP MESSAGE: " + message);
 
             MatchCollection regular = Regex.Matches(message, @"(?:S?([YPR]|U))\[(-?[0-9]+(?:\.[0-9]+))\]");
             
@@ -464,7 +463,7 @@ namespace YawVR {
             }
 
             if (message.Contains("YAWDEVICE")) {
-
+                
                 //We recieved a device discovery answer message
                 //example device discovery answer: "YAWDEVICE;MacAddrId;MyDeviceName;" + tcpServerPort + (state == DeviceState.Available ? ";OK" : ";RESERVED");
                 var messageParts = message.Split(';');
@@ -473,13 +472,16 @@ namespace YawVR {
                 int tcp;
 
                 if (messageParts.Length >= 5 && int.TryParse(messageParts[3], out tcp)) {
-                    DeviceType type = message.Contains("YAWDEVICE2") ? DeviceType.YAW2 : DeviceType.YAW1;
+                    DeviceType type = DeviceType.YAW1;
+                    if (message.Contains("YAWDEVICE3")) type = DeviceType.YAW3;
+                    else if (message.Contains("YAWDEVICE2")) type = DeviceType.YAW2;
                     DeviceStatus status = messageParts[4] == "AVAILABLE" ? DeviceStatus.Available : DeviceStatus.Reserved;
                     var yawDevice = new YawDevice(ip,type, tcp, udp, messageParts[1], messageParts[2], status);
                     //Call delegate function if we have a delegate
+                    Debug.Log("ControllerDelegate is: " + ControllerDelegate);
                     if (ControllerDelegate != null) {
                         ControllerDelegate.DidFoundDevice(yawDevice);
-
+                        Debug.Log("DidFoundDevice() called with: " + device.Name + ", type: " + device.type);
                     }
                 }
             }
@@ -508,7 +510,9 @@ namespace YawVR {
                         string message = System.Text.Encoding.ASCII.GetString(data, 1, data.Length - 1);
                      //   Debug.Log(message);
                         if (message.Contains("AVAILABLE")) {
-                            device.type = message.Contains("YAWDEVICE2") ? DeviceType.YAW2 : DeviceType.YAW1;
+                            if (message.Contains("YAWDEVICE3")) device.type = DeviceType.YAW3;
+                            else if (message.Contains("YAWDEVICE2")) device.type = DeviceType.YAW2;
+                            else device.type = DeviceType.YAW1;
                             foreach (Action a in OnConnectReceivers) {
                                 a.Invoke();
                             }
@@ -522,8 +526,6 @@ namespace YawVR {
                                 callBacks.connectingSuccess = null;
                                 callBacks.connectingError = null;
                             }
-
-
 
                         } else {
                             //Simulator is reserved, setting state back to initial

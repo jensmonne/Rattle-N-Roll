@@ -8,7 +8,7 @@ namespace YawVR {
 
     [Serializable]
     public enum DeviceType {
-        YAW1, YAW2
+        YAW1, YAW2, YAW3
     }
     [Serializable]
     public enum DeviceState {
