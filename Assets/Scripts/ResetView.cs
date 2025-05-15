@@ -8,7 +8,10 @@ public class ResetView : MonoBehaviour
     [SerializeField] private InputActionAsset inputActions;
     
     [SerializeField] private Transform xrOrigin;
-    [SerializeField] private Transform headset;
+    //[SerializeField] private Transform headset;
+    
+    [SerializeField] private Vector3 seatPosition = new Vector3(-0.33f, 0.63f, 0.0509f);
+    [SerializeField] private Vector3 seatRotation = Vector3.zero;
     
     private InputAction resetViewButton;
 
@@ -27,16 +30,15 @@ public class ResetView : MonoBehaviour
     
     private void ResetHeadsetView(InputAction.CallbackContext context)
     {
-        Vector3 headsetForward = headset.forward;
-        headsetForward.y = 0; // Flatten to horizontal
-        headsetForward.Normalize();
+        if (xrOrigin == null)
+        {
+            Debug.LogWarning("XR Origin not assigned.");
+            return;
+        }
 
-        // Find the angle between where the headset is looking and the car's forward
-        float angleOffset = Vector3.SignedAngle(headsetForward, xrOrigin.forward, Vector3.up);
+        xrOrigin.localPosition = seatPosition;
+        xrOrigin.localRotation = Quaternion.Euler(seatRotation);
 
-        // Apply the inverse of that angle to the XR Origin
-        xrOrigin.Rotate(0, angleOffset, 0, Space.Self);
-
-        Debug.Log("Recentered headset view relative to XR Origin.");
+        Debug.Log("XR Origin reset to seat position and rotation.");
     }
 }
