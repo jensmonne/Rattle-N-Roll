@@ -7,6 +7,9 @@ public class ResetView : MonoBehaviour
 {
     [SerializeField] private InputActionAsset inputActions;
     
+    [SerializeField] private Transform xrOrigin;
+    [SerializeField] private Transform headset;
+    
     private InputAction resetViewButton;
 
     private void OnEnable()
@@ -24,19 +27,15 @@ public class ResetView : MonoBehaviour
     
     private void ResetHeadsetView(InputAction.CallbackContext context)
     {
-        List<XRInputSubsystem> subsystems = new List<XRInputSubsystem>();
-        SubsystemManager.GetSubsystems(subsystems);
+        Vector3 forward = headset.forward;
+        forward.y = 0;
+        forward.Normalize();
 
-        foreach (var subsystem in subsystems)
-        {
-            if (subsystem.running)
-            {
-                subsystem.TryRecenter();
-                Debug.Log("VR headset view recentered.");
-                return;
-            }
-        }
+        Quaternion targetRotation = Quaternion.LookRotation(forward);
+        xrOrigin.rotation = targetRotation;
 
-        Debug.LogWarning("No XRInputSubsystem found to recenter.");
+        xrOrigin.position = new Vector3(-headset.localPosition.x, xrOrigin.position.y, -headset.localPosition.z);
+
+        Debug.Log("XR view manually recentered.");
     }
 }
