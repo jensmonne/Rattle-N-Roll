@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Unity.XR.CoreUtils;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.XR;
@@ -6,13 +7,12 @@ using UnityEngine.XR;
 public class ResetView : MonoBehaviour
 {
     [SerializeField] private InputActionAsset inputActions;
-    
+
     [SerializeField] private Transform xrOrigin;
     //[SerializeField] private Transform headset;
-    
-    [SerializeField] private Vector3 seatPosition = new Vector3(-0.33f, 0.63f, 0.0509f);
-    [SerializeField] private Vector3 seatRotation = Vector3.zero;
-    
+
+    public Transform target;
+
     private InputAction resetViewButton;
 
     private void OnEnable()
@@ -27,7 +27,7 @@ public class ResetView : MonoBehaviour
         resetViewButton.performed -= ResetHeadsetView;
         resetViewButton.Disable();
     }
-    
+
     private void ResetHeadsetView(InputAction.CallbackContext context)
     {
         if (xrOrigin == null)
@@ -36,9 +36,13 @@ public class ResetView : MonoBehaviour
             return;
         }
 
-        xrOrigin.localPosition = seatPosition;
-        xrOrigin.localRotation = Quaternion.Euler(seatRotation);
+        
+        Transform cameraTransform = Camera.main.transform;
 
-        Debug.Log("XR Origin reset to seat position and rotation.");
+        Vector3 cameraOffset = cameraTransform.position - xrOrigin.position;
+
+
+        xrOrigin.position = target.position - cameraOffset;
     }
 }
+
