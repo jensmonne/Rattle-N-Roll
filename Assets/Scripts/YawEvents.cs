@@ -1,3 +1,4 @@
+using System.Collections;
 using Unity.VisualScripting.Dependencies.NCalc;
 using UnityEditor.Networking.PlayerConnection;
 using UnityEngine;
@@ -21,7 +22,7 @@ public class YawEvents : MonoBehaviour
 
     public void OnYawConnected()
     {
-        SetYawToPark();
+        StartCoroutine(WaitForConnectionThenPark());
     }
 
     public void OnYawDisconnected()
@@ -34,17 +35,47 @@ public class YawEvents : MonoBehaviour
         
     }
 
-    private void SetYawToPark()
+    private IEnumerator WaitForConnectionThenPark()
     {
+        while (YawController.Instance() == null || YawController.Instance().State != ControllerState.Connected)
+        {
+            yield return null;
+        }
+
+        Debug.Log("Yaw connected. Starting...");
+
+        bool startDone = false;
         YawController.Instance().StartDevice(
-            () => Debug.Log("Yaw started"),
-            error => Debug.LogError("Failed to start device: " + error)
+            onSuccess: () =>
+            {
+                Debug.Log("Yaw started.");
+                startDone = true;
+            },
+            onError: error =>
+            {
+                Debug.LogError("Failed to start Yaw: " + error);
+                startDone = true;
+            }
         );
-        
-        YawController.Instance().StopDevice(
-            true,
-            () => Debug.Log("Yaw stopped"),
-            error => Debug.LogError("Failed to stop device: " + error)
-        );
+
+        while (!startDone)
+        {
+            yield return null;
+        }
+
+        yield return new WaitForSeconds(0.2f);
+
+        if (YawController.Instance().State == ControllerState.Started)
+        {
+            YawController.Instance().StopDevice(
+                park: true,
+                onSuccess: () => Debug.Log("Yaw successfully parked."),
+                onError: error => Debug.LogError("Failed to park Yaw: " + error)
+            );
+        }
+        else
+        {
+            Debug.LogWarning("Yaw not in Started state after start. Skipping park.");
+        }
     }
 }
