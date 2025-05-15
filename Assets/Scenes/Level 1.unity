@@ -260,6 +260,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 95f92416c44771e41999e068947308be, type: 3}
+--- !u!4 &148096830 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3721831972765519563, guid: 95f92416c44771e41999e068947308be, type: 3}
+  m_PrefabInstance: {fileID: 148096829}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &659472493 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8411604111482309835, guid: b2db00cc4030f47faad8506c631645eb, type: 3}
@@ -598,7 +603,7 @@ PrefabInstance:
     - target: {fileID: 2139193773, guid: b2db00cc4030f47faad8506c631645eb, type: 3}
       propertyPath: cameraOffsetTransform
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 148096830}
     - target: {fileID: 1533629748126424, guid: b2db00cc4030f47faad8506c631645eb, type: 3}
       propertyPath: m_Name
       value: YawController
