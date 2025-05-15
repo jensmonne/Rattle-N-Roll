@@ -44,7 +44,7 @@ public class CarController : MonoBehaviour
     {
         if (YawController.Instance() != null)
         {
-            // Make the car's transform the input for the Yaw motion
+            // Makes the car's transform the input for the Yaw motion, dunno how it works exactly but it does so im happy
             YawController.Instance().TrackerObject.transform.rotation = transform.rotation;
         }
     }
