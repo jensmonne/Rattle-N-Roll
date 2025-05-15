@@ -27,15 +27,16 @@ public class ResetView : MonoBehaviour
     
     private void ResetHeadsetView(InputAction.CallbackContext context)
     {
-        Vector3 forward = headset.forward;
-        forward.y = 0;
-        forward.Normalize();
+        Vector3 headsetForward = headset.forward;
+        headsetForward.y = 0; // Flatten to horizontal
+        headsetForward.Normalize();
 
-        Quaternion targetRotation = Quaternion.LookRotation(forward);
-        xrOrigin.rotation = targetRotation;
+        // Find the angle between where the headset is looking and the car's forward
+        float angleOffset = Vector3.SignedAngle(headsetForward, xrOrigin.forward, Vector3.up);
 
-        xrOrigin.position = new Vector3(-headset.localPosition.x, xrOrigin.position.y, -headset.localPosition.z);
+        // Apply the inverse of that angle to the XR Origin
+        xrOrigin.Rotate(0, angleOffset, 0, Space.Self);
 
-        Debug.Log("XR view manually recentered.");
+        Debug.Log("Recentered headset view relative to XR Origin.");
     }
 }
