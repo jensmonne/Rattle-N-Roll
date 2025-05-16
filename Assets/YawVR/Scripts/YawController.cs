@@ -432,7 +432,7 @@ namespace YawVR {
         /// This function handles the incoming UDP packages from the yawDevice
         /// </summary>
         public void DidRecieveUDPMessage(string message, IPEndPoint remoteEndPoint) {
-            Debug.LogError("RAW UDP MESSAGE: " + message);
+            // Debug.LogError("RAW UDP MESSAGE: " + message);
 
             MatchCollection regular = Regex.Matches(message, @"(?:S?([YPR]|U))\[(-?[0-9]+(?:\.[0-9]+))\]");
             
