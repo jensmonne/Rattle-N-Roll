@@ -8,7 +8,7 @@ public class DealDamage : MonoBehaviour
         if (collision.gameObject.CompareTag("Enemy"))
         {
             zombie = collision.gameObject.GetComponent<ZombieHealth>();
-            zombie.TakeDamage(100);
+            zombie.TakeDamage(zombie.currentHealth);
         }
     }
 }
