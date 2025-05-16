@@ -9,7 +9,6 @@ public class ResetView : MonoBehaviour
     [SerializeField] private InputActionAsset inputActions;
 
     [SerializeField] private Transform xrOrigin;
-    //[SerializeField] private Transform headset;
 
     public Transform target;
 
@@ -35,12 +34,10 @@ public class ResetView : MonoBehaviour
             Debug.LogWarning("XR Origin not assigned.");
             return;
         }
-
         
         Transform cameraTransform = Camera.main.transform;
 
         Vector3 cameraOffset = cameraTransform.position - xrOrigin.position;
-
 
         xrOrigin.position = target.position - cameraOffset;
     }
