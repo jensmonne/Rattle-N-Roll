@@ -63,8 +63,6 @@ public class YawEvents : MonoBehaviour
             yield return null;
         }
 
-        //yield return new WaitForSeconds(0.2f);
-
         if (YawController.Instance().State == ControllerState.Started)
         {
             YawController.Instance().StopDevice(
