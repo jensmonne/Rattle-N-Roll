@@ -14,8 +14,7 @@ public class ZombieHealth : MonoBehaviour
         zombie = GetComponent<StateMachine_Zombie>();
         ragdoll = GetComponent<RagdollActivator>();
     }
-
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    
     void Start()
     {
         currentHealth = maxHealth;
@@ -43,6 +42,7 @@ public class ZombieHealth : MonoBehaviour
     {
         zombie.state = ZombieState.Death;
         ragdoll.ActivateRagdoll();
+        GameManager.Instance.Addscore();
         StartCoroutine(Wait());
 
 

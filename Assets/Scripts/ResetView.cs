@@ -9,8 +9,11 @@ public class ResetView : MonoBehaviour
     [SerializeField] private InputActionAsset inputActions;
 
     [SerializeField] private Transform xrOrigin;
-
     public Transform target;
+    public Transform cameraTransform; 
+    
+    
+    
 
     private InputAction resetViewButton;
 
@@ -29,26 +32,19 @@ public class ResetView : MonoBehaviour
 
     private void ResetHeadsetView(InputAction.CallbackContext context)
     {
+        
         if (xrOrigin == null)
         {
             Debug.LogWarning("XR Origin not assigned.");
             return;
         }
         
-        Transform cameraTransform = Camera.main.transform;
+        float currentYRotation = cameraTransform.eulerAngles.y;
 
-        Vector3 cameraOffset = cameraTransform.position - xrOrigin.position;
+        xrOrigin.position = target.position;
+        cameraTransform.Rotate(0, -currentYRotation, 0);
         
-        Quaternion currentCameraRotation = cameraTransform.rotation;
-        Quaternion targetRotation = target.rotation;
 
-        Quaternion rotationDelta = targetRotation * Quaternion.Inverse(currentCameraRotation);
-
-        xrOrigin.rotation = rotationDelta * xrOrigin.rotation;
-
-        cameraOffset = cameraTransform.position - xrOrigin.position;
-
-        xrOrigin.position = target.position - cameraOffset;
         
         Debug.LogError("View has been reset");
     }
