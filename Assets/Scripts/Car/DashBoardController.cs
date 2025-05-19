@@ -7,6 +7,7 @@ public class DashBoardController : MonoBehaviour
     [SerializeField] private TMP_Text gearText;
     [SerializeField] private Rigidbody carRigidbody;
     [SerializeField] private TMP_Text speedText;
+    [SerializeField] private TMP_Text fuelText;
     
     private float currentSpeed = 0;
     
@@ -14,6 +15,11 @@ public class DashBoardController : MonoBehaviour
     {
         char firstChar = currentGear[0];
         gearText.text = firstChar.ToString();
+    }
+
+    public void SetFuelMessage(float currentFuel)
+    {
+        fuelText.text = currentFuel.ToString();
     }
 
     public void Update()

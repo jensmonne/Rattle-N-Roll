@@ -31,6 +31,8 @@ public class CarController : MonoBehaviour
     [SerializeField] private float maxWheelRotation = 90f;
     
     [SerializeField] private int currentGearIndex = 0;
+    [SerializeField] private float maxFuel = 100f;
+    [SerializeField] private float currentFuel;
     //private int previousGearIndex = 0;
     //private int attemptedGearIndex = -1;
     //private bool clutchIn = false;
@@ -39,6 +41,11 @@ public class CarController : MonoBehaviour
     private float steerInput;
     private float accelInput;
     private float brakeInputValue;
+    
+    private void Start()
+    {
+        currentFuel = maxFuel;
+    }
     
     private void LateUpdate()
     {
@@ -96,11 +103,25 @@ public class CarController : MonoBehaviour
         float brakeForce = brakeInputValue * maxMotorTorque;
         rearLeftWheel.brakeTorque = brakeForce;
         rearRightWheel.brakeTorque = brakeForce;
+        
+        DrainFuel(motor);
     }
 
     private void DrainFuel(float motorTorque)
     {
-        if (motorTorque == 0) return;
+        if (currentFuel <= 0f)
+        {
+            Engine.isEngineRunning = false;
+            Debug.Log("Out of fuel!");
+            return;
+        }
+        
+        float drainRate = Mathf.Abs(motorTorque) * 0.001f;
+        currentFuel -= drainRate * Time.fixedDeltaTime;
+
+        if (currentFuel < 0f) currentFuel = 0f;
+
+        dashController.SetFuelMessage(currentFuel / maxFuel);
     }
 
     private void SetGear(int gearIndex)
