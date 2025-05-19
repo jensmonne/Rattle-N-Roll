@@ -29,6 +29,8 @@ public class ResetView : MonoBehaviour
         resetViewButton.performed -= ResetHeadsetView;
         resetViewButton.Disable();
     }
+    
+    
 
     private void ResetHeadsetView(InputAction.CallbackContext context)
     {
@@ -38,13 +40,9 @@ public class ResetView : MonoBehaviour
             Debug.LogWarning("XR Origin not assigned.");
             return;
         }
-        
-        float currentYRotation = cameraTransform.eulerAngles.y;
 
         xrOrigin.position = target.position;
-        cameraTransform.Rotate(0, -currentYRotation, 0);
-        
-
+        cameraTransform.Rotate(0, 85, 0);
         
         Debug.LogError("View has been reset");
     }
