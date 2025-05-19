@@ -40,6 +40,8 @@ public class ResetView : MonoBehaviour
         Vector3 cameraOffset = cameraTransform.position - xrOrigin.position;
 
         xrOrigin.position = target.position - cameraOffset;
+        
+        Debug.LogError("View has been reset");
     }
 }
 

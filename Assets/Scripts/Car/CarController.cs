@@ -28,7 +28,7 @@ public class CarController : MonoBehaviour
     [SerializeField] private float[] gearRatios = { 0f, -0.5f, 0.4f, 0.7f, 1.0f };
     [SerializeField] private float maxMotorTorque = 1500f;
     [SerializeField] private float maxSteerAngle = 30f;
-    [SerializeField] private float maxWheelRotation = 420f;
+    [SerializeField] private float maxWheelRotation = 90f;
     
     [SerializeField] private int currentGearIndex = 0;
     //private int previousGearIndex = 0;
@@ -96,6 +96,11 @@ public class CarController : MonoBehaviour
         float brakeForce = brakeInputValue * maxMotorTorque;
         rearLeftWheel.brakeTorque = brakeForce;
         rearRightWheel.brakeTorque = brakeForce;
+    }
+
+    private void DrainFuel(float motorTorque)
+    {
+        if (motorTorque == 0) return;
     }
 
     private void SetGear(int gearIndex)
