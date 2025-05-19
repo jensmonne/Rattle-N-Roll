@@ -38,6 +38,15 @@ public class ResetView : MonoBehaviour
         Transform cameraTransform = Camera.main.transform;
 
         Vector3 cameraOffset = cameraTransform.position - xrOrigin.position;
+        
+        Quaternion currentCameraRotation = cameraTransform.rotation;
+        Quaternion targetRotation = target.rotation;
+
+        Quaternion rotationDelta = targetRotation * Quaternion.Inverse(currentCameraRotation);
+
+        xrOrigin.rotation = rotationDelta * xrOrigin.rotation;
+
+        cameraOffset = cameraTransform.position - xrOrigin.position;
 
         xrOrigin.position = target.position - cameraOffset;
         
