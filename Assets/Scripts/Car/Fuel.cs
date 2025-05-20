@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class Fuel : MonoBehaviour
 {
-     public static float maxfuelAmount = 100f;
+     public static float maxfuelAmount = 1000f;
      public static float currentFuelAmount;
 
     private void Start()

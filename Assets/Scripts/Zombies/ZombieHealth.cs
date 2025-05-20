@@ -8,6 +8,7 @@ public class ZombieHealth : MonoBehaviour
     public int currentHealth;
     private StateMachine_Zombie zombie;
     private RagdollActivator ragdoll;
+    [SerializeField] private CapsuleCollider capsuleCollider;
 
     private void Awake()
     {
@@ -41,6 +42,7 @@ public class ZombieHealth : MonoBehaviour
     private void Death()
     {
         zombie.state = ZombieState.Death;
+        capsuleCollider.enabled = false;
         ragdoll.ActivateRagdoll();
         GameManager.Instance.Addscore();
         StartCoroutine(Wait());
@@ -50,7 +52,7 @@ public class ZombieHealth : MonoBehaviour
 
     IEnumerator Wait()
     {
-        yield return new WaitForSeconds(3f);
+        yield return new WaitForSeconds(1.5f);
         Destroy(gameObject);
     }
 }
