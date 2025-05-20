@@ -3,6 +3,8 @@ using UnityEngine.InputSystem;
 
 public class Engine : MonoBehaviour
 {
+    public static Engine Instance { get; private set; }
+    
     [Header("Input")]
     [SerializeField] private InputActionAsset inputActions;
     private InputAction engineOn;
@@ -20,6 +22,19 @@ public class Engine : MonoBehaviour
     private bool[] lightStates;
     
     public static bool isEngineRunning = false;
+    
+    private void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Debug.LogWarning("Multiple instances of Engine found!");
+            Destroy(this);
+        }
+    }
     
     private void OnEnable()
     {
@@ -88,5 +103,28 @@ public class Engine : MonoBehaviour
         audioSource.loop = false;
         audioSource.clip = engineStopClip;
         audioSource.Play();
+    }
+
+    public static void TurnEngineOff()
+    {
+        if (Instance == null) return;
+
+        Instance.InternalTurnEngineOff();
+    }
+
+    private void InternalTurnEngineOff()
+    {
+        for (int i = 0; i < lights.Length; i++)
+        {
+            lightStates[i] = lights[i].activeSelf;
+            lights[i].SetActive(false);
+        }
+
+        audioSource.Stop();
+        audioSource.loop = false;
+        audioSource.clip = engineStopClip;
+        audioSource.Play();
+
+        isEngineRunning = false;
     }
 }
