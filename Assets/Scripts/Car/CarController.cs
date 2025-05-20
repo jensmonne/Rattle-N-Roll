@@ -117,7 +117,7 @@ public class CarController : MonoBehaviour
 
         if (currentFuel < 0f) currentFuel = 0f;
 
-        dashController.SetFuelMessage(currentFuel / maxFuel);
+        Fuel.currentFuelAmount = currentFuel;
     }
 
     private void SetGear(int gearIndex)

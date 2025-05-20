@@ -11,9 +11,6 @@ public class ResetView : MonoBehaviour
     [SerializeField] private Transform xrOrigin;
     public Transform target;
     public Transform cameraTransform; 
-    
-    
-    
 
     private InputAction resetViewButton;
 
@@ -30,8 +27,6 @@ public class ResetView : MonoBehaviour
         resetViewButton.Disable();
     }
     
-    
-
     private void ResetHeadsetView(InputAction.CallbackContext context)
     {
         

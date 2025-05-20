@@ -1,13 +1,19 @@
+using System;
 using UnityEngine;
 
 public class Fuel : MonoBehaviour
 {
-    [SerializeField] public static float maxfuelAmount = 100f;
-    [SerializeField] public static float currentFuelAmount;
+     public static float maxfuelAmount = 100f;
+     public static float currentFuelAmount;
+
+    private void Start()
+    {
+        SetCurrentFuelAmount();
+    }
 
     public static void SetCurrentFuelAmount()
     {
-        maxfuelAmount = currentFuelAmount;
+        currentFuelAmount = maxfuelAmount;
     }
     
     public static void AddMaxFuel(float amount)
