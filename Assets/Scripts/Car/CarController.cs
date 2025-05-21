@@ -30,6 +30,7 @@ public class CarController : MonoBehaviour
     
     [Header("Settings")]
     [SerializeField] private float[] gearRatios = { 0f, -0.6f, 1.1f, 1.4f, 1.7f };
+    private readonly float[] minSpeedsForGears = { 0f, 0f, 0f, 25f, 55f }; // in km/h
     [SerializeField] private float maxMotorTorque = 1500f;
     [SerializeField] private float maxSteerAngle = 30f;
     [SerializeField] private float maxWheelRotation = 90f;
@@ -81,6 +82,18 @@ public class CarController : MonoBehaviour
     private void FixedUpdate()
     {
         if (!Engine.isEngineRunning || isGrinding) return;
+        
+        float currentSpeedKmh = rb.linearVelocity.magnitude * 3.6f;
+        if (currentGearIndex > 1 && currentSpeedKmh < minSpeedsForGears[currentGearIndex])
+        {
+            Debug.LogWarning($"Too slow for current gear ({GearLabel(currentGearIndex)}), forcing to Neutral");
+            grindingAudioSource.clip = gearGrindClip;
+            grindingAudioSource.loop = false;
+            grindingAudioSource.Play();
+            currentGearIndex = 0;
+            dashController.SetGearMessage("Neutral");
+            return;
+        }
         
         float wheelRPM = (rearLeftWheel.rpm + rearRightWheel.rpm) * 0.5f;
         float targetRPM = Mathf.Abs(wheelRPM * gearRatios[currentGearIndex] * finalDriveRatio);
@@ -178,8 +191,6 @@ public class CarController : MonoBehaviour
         if (newGear == 0 || newGear == 1) return true;
 
         if (Mathf.Abs(newGear - currentGearIndex) > 1) return false;
-
-        float[] minSpeedsForGears = { 0f, 0f, 0f, 25f, 55f };
 
         if (speed < minSpeedsForGears[newGear])
         {
