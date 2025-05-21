@@ -29,7 +29,7 @@ public class CarController : MonoBehaviour
     [SerializeField] private WheelCollider rearRightWheel;
     
     [Header("Settings")]
-    [SerializeField] private float[] gearRatios = { 0f, -0.5f, 0.4f, 0.7f, 1.0f };
+    [SerializeField] private float[] gearRatios = { 0f, -0.6f, 1.1f, 1.4f, 1.7f };
     [SerializeField] private float maxMotorTorque = 1500f;
     [SerializeField] private float maxSteerAngle = 30f;
     [SerializeField] private float maxWheelRotation = 90f;
@@ -99,7 +99,7 @@ public class CarController : MonoBehaviour
 
         float gearRatio = gearRatios[currentGearIndex];
         float currentSpeed = rb.linearVelocity.magnitude;
-        float speedFactor = Mathf.Clamp01(1f - currentSpeed / 100f); // Need to tweak the last float number for top speed stuff
+        float speedFactor = Mathf.Clamp01(1f - currentSpeed / 50f); // Need to tweak the last float number for top speed stuff
         float torqueMultiplier = torqueCurve.Evaluate(normalizedRPM);
         float motor = accelInput * maxMotorTorque * gearRatio * torqueMultiplier;
         
