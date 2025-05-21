@@ -8,8 +8,8 @@ public class CarController : MonoBehaviour
     [SerializeField] private DashBoardController dashController;
     [SerializeField] private Rigidbody rb;
     [SerializeField] private AnimationCurve torqueCurve;
-    //[SerializeField] private AudioSource grindingAudioSource;
-    //[SerializeField] private AudioClip gearGrindClip;
+    [SerializeField] private AudioSource grindingAudioSource;
+    [SerializeField] private AudioClip gearGrindClip;
     
     [Header("Input Actions")]
     [SerializeField] private InputActionReference accelerateInput;
@@ -36,16 +36,11 @@ public class CarController : MonoBehaviour
     //private int previousGearIndex = 0;
     //private int attemptedGearIndex = -1;
     //private bool clutchIn = false;
-    //private bool isGrinding = false;
+    private bool isGrinding = false;
     
     private float steerInput;
     private float accelInput;
     private float brakeInputValue;
-
-    private void Start()
-    {
-        rb = GetComponent<Rigidbody>();
-    }
     
     private void LateUpdate()
     {
@@ -95,7 +90,9 @@ public class CarController : MonoBehaviour
         frontRightWheel.steerAngle = steerAngle;
 
         float gearRatio = gearRatios[currentGearIndex];
-        float motor = accelInput * maxMotorTorque * gearRatio;
+        float currentSpeed = rb.linearVelocity.magnitude;
+        float speedFactor = Mathf.Clamp01(1f - currentSpeed / 100f); // Need to tweak the last float number for top speed stuff
+        float motor = accelInput * maxMotorTorque * gearRatio * speedFactor;
         
         rearLeftWheel.motorTorque = motor;
         rearRightWheel.motorTorque = motor;
@@ -135,7 +132,7 @@ public class CarController : MonoBehaviour
             return;
         }
         
-        if (!Engine.isEngineRunning) return;
+        if (!Engine.isEngineRunning || !IsValidGearChange(gearIndex)) return;
         
         /*if (!clutchIn && !isGrinding)
         {
@@ -156,6 +153,7 @@ public class CarController : MonoBehaviour
         }
 
         previousGearIndex = currentGearIndex;*/
+        if (isGrinding) StopGrindingSound();
         currentGearIndex = gearIndex;
         //attemptedGearIndex = -1;
         dashController.SetGearMessage(GearLabel(currentGearIndex));
@@ -164,7 +162,7 @@ public class CarController : MonoBehaviour
     
     private bool IsValidGearChange(int newGear)
     {
-        float speedKPH = rb.linearVelocity.magnitude * 3.6f;
+        float speed = rb.linearVelocity.magnitude * 3.6f;
 
         // Always allow shifting to Neutral or Reverse
         if (newGear == 0 || newGear == 1) return true;
@@ -176,9 +174,10 @@ public class CarController : MonoBehaviour
         float[] minSpeedsForGears = { 0f, 0f, 5f, 15f, 30f }; // in km/h
 
         // Only allow shift if speed meets requirement
-        if (speedKPH < minSpeedsForGears[newGear])
+        if (speed < minSpeedsForGears[newGear])
         {
-            Debug.LogWarning($"Too slow to shift into {GearLabel(newGear)} (Speed: {speedKPH:F1} km/h)");
+            Debug.LogWarning($"Too slow to shift into {GearLabel(newGear)} (Speed: {speed:F1} km/h)");
+            PlayGrindingSound();
             return false;
         }
 
@@ -199,7 +198,7 @@ public class CarController : MonoBehaviour
         };
     }
 
-    /*private void PlayGrindingSound()
+    private void PlayGrindingSound()
     {
         if (grindingAudioSource && gearGrindClip)
         {
@@ -217,5 +216,5 @@ public class CarController : MonoBehaviour
             grindingAudioSource.Stop();
             isGrinding = false;
         }
-    }*/
+    }
 }

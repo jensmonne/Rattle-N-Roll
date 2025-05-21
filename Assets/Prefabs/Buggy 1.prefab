@@ -403,8 +403,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   inputActions: {fileID: -944628639613478452, guid: b3b1a3e84de11434198c7a4e547b7340, type: 3}
   xrOrigin: {fileID: 0}
-  seatPosition: {x: -0.33, y: 0.63, z: 0.0509}
-  seatRotation: {x: 0, y: 0, z: 0}
+  target: {fileID: 0}
+  cameraTransform: {fileID: 0}
 --- !u!1 &755078938048244531
 GameObject:
   m_ObjectHideFlags: 0
@@ -540,6 +540,7 @@ MonoBehaviour:
   gearText: {fileID: 2897380001682465382}
   carRigidbody: {fileID: 9085021220506523402}
   speedText: {fileID: 5429710601999895431}
+  fuelslider: {fileID: 0}
 --- !u!1 &1400012994612705880
 GameObject:
   m_ObjectHideFlags: 0
@@ -1522,8 +1523,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   inputActions: {fileID: 0}
   xrOrigin: {fileID: 0}
-  seatPosition: {x: -0.33, y: 0.63, z: 0.0509}
-  seatRotation: {x: 0, y: 0, z: 0}
+  target: {fileID: 0}
+  cameraTransform: {fileID: 0}
 --- !u!1 &2694995943523441503
 GameObject:
   m_ObjectHideFlags: 0
@@ -2655,6 +2656,60 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   steeringWheel: {fileID: 3657819802342533310}
   dashController: {fileID: 5987781816657579907}
+  rb: {fileID: 9085021220506523402}
+  torqueCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0.2
+      inSlope: 2
+      outSlope: 2
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.3
+      value: 0.8
+      inSlope: 1.5
+      outSlope: 1.5
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.5
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.7
+      value: 0.8
+      inSlope: -1
+      outSlope: -1
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0.5
+      inSlope: -1
+      outSlope: -1
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  grindingAudioSource: {fileID: 5808691287848839877}
+  gearGrindClip: {fileID: 8300000, guid: 9b9644690a3076642ae0a673e32a6d0c, type: 3}
   accelerateInput: {fileID: 4963959985940464701, guid: b3b1a3e84de11434198c7a4e547b7340, type: 3}
   brakeInput: {fileID: 539034585735555949, guid: b3b1a3e84de11434198c7a4e547b7340, type: 3}
   steeringInput: {fileID: 7841916774422618244, guid: b3b1a3e84de11434198c7a4e547b7340, type: 3}
