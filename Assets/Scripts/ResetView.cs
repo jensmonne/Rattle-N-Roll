@@ -1,16 +1,14 @@
-using System.Collections.Generic;
 using Unity.XR.CoreUtils;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.XR;
-
+using UnityEngine.XR.Interaction.Toolkit;
 public class ResetView : MonoBehaviour
 {
     [SerializeField] private InputActionAsset inputActions;
 
-    [SerializeField] private Transform xrOrigin;
-    public Transform target;
-    public Transform cameraTransform; 
+    [SerializeField] private XROrigin xrOrigin;
+    public Transform driverHeadTarget;
+    
 
     private InputAction resetViewButton;
 
@@ -29,17 +27,32 @@ public class ResetView : MonoBehaviour
     
     private void ResetHeadsetView(InputAction.CallbackContext context)
     {
-        XROrigin xrorigin = GetComponent<XROrigin>();
-        if (xrOrigin == null)
+        if (xrOrigin == null || driverHeadTarget == null)
         {
-            Debug.LogWarning("XR Origin not assigned.");
+            Debug.LogError("XR Origin or Driver Target is not assigned.");
             return;
         }
 
-        xrOrigin.position = target.position;
-        xrorigin.MatchOriginUpOriginForward(target.up,target.forward);
+        Transform hmd = xrOrigin.Camera.transform;
+
+        Vector3 headsetLocalOffset = xrOrigin.transform.InverseTransformPoint(hmd.position);
+        Vector3 worldTargetHeadPos = driverHeadTarget.position;
+        Vector3 newRigPosition = worldTargetHeadPos - (xrOrigin.transform.rotation * headsetLocalOffset);
+        xrOrigin.transform.position = newRigPosition;
+
+        Vector3 hmdForward = hmd.forward;
+        hmdForward.y = 0;
+        hmdForward.Normalize();
+
+        Vector3 targetForward = driverHeadTarget.forward;
+        targetForward.y = 0;
+        targetForward.Normalize();
+
+        float angleDifference = Vector3.SignedAngle(hmdForward, targetForward, Vector3.up);
+
         
-        Debug.LogError("View has been reset");
+        xrOrigin.transform.RotateAround(hmd.position, Vector3.up, angleDifference);
+
     }
 }
 
