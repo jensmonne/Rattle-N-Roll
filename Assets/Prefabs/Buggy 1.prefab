@@ -2710,6 +2710,8 @@ MonoBehaviour:
     m_RotationOrder: 4
   grindingAudioSource: {fileID: 5808691287848839877}
   gearGrindClip: {fileID: 8300000, guid: 9b9644690a3076642ae0a673e32a6d0c, type: 3}
+  maxRPM: 7000
+  engineAudioSource: {fileID: 2833996155168909569}
   accelerateInput: {fileID: 4963959985940464701, guid: b3b1a3e84de11434198c7a4e547b7340, type: 3}
   brakeInput: {fileID: 539034585735555949, guid: b3b1a3e84de11434198c7a4e547b7340, type: 3}
   steeringInput: {fileID: 7841916774422618244, guid: b3b1a3e84de11434198c7a4e547b7340, type: 3}
@@ -2732,6 +2734,7 @@ MonoBehaviour:
   maxMotorTorque: 1500
   maxSteerAngle: 30
   maxWheelRotation: 420
+  finalDriveRatio: 4.1
   currentGearIndex: 0
 --- !u!114 &6066127746390552649
 MonoBehaviour:

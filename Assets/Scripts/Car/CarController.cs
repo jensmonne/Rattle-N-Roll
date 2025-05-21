@@ -10,6 +10,8 @@ public class CarController : MonoBehaviour
     [SerializeField] private AnimationCurve torqueCurve;
     [SerializeField] private AudioSource grindingAudioSource;
     [SerializeField] private AudioClip gearGrindClip;
+    [SerializeField] private float maxRPM = 7000f;
+    [SerializeField] private AudioSource engineAudioSource;
     
     [Header("Input Actions")]
     [SerializeField] private InputActionReference accelerateInput;
@@ -31,6 +33,7 @@ public class CarController : MonoBehaviour
     [SerializeField] private float maxMotorTorque = 1500f;
     [SerializeField] private float maxSteerAngle = 30f;
     [SerializeField] private float maxWheelRotation = 90f;
+    [SerializeField] private float finalDriveRatio = 4.1f;
     
     [SerializeField] private int currentGearIndex = 0;
     //private int previousGearIndex = 0;
@@ -41,6 +44,8 @@ public class CarController : MonoBehaviour
     private float steerInput;
     private float accelInput;
     private float brakeInputValue;
+    
+    private float engineRPM;
     
     private void LateUpdate()
     {
@@ -75,10 +80,13 @@ public class CarController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (!Engine.isEngineRunning) return;
-
-        //if (isGrinding) return;
+        if (!Engine.isEngineRunning || isGrinding) return;
         
+        float wheelRPM = (rearLeftWheel.rpm + rearRightWheel.rpm) * 0.5f;
+        float targetRPM = Mathf.Abs(wheelRPM * gearRatios[currentGearIndex] * finalDriveRatio);
+        engineRPM = Mathf.Lerp(engineRPM, targetRPM, 0.1f);
+        float normalizedRPM = Mathf.Clamp01(engineRPM / maxRPM);
+
         steerInput = steeringInput.action.ReadValue<float>();
         accelInput = accelerateInput.action.ReadValue<float>();
         brakeInputValue = brakeInput.action.ReadValue<float>();
@@ -92,7 +100,8 @@ public class CarController : MonoBehaviour
         float gearRatio = gearRatios[currentGearIndex];
         float currentSpeed = rb.linearVelocity.magnitude;
         float speedFactor = Mathf.Clamp01(1f - currentSpeed / 100f); // Need to tweak the last float number for top speed stuff
-        float motor = accelInput * maxMotorTorque * gearRatio * speedFactor;
+        float torqueMultiplier = torqueCurve.Evaluate(normalizedRPM);
+        float motor = accelInput * maxMotorTorque * gearRatio * torqueMultiplier;
         
         rearLeftWheel.motorTorque = motor;
         rearRightWheel.motorTorque = motor;
@@ -100,6 +109,8 @@ public class CarController : MonoBehaviour
         float brakeForce = brakeInputValue * maxMotorTorque;
         rearLeftWheel.brakeTorque = brakeForce;
         rearRightWheel.brakeTorque = brakeForce;
+        
+        engineAudioSource.pitch = Mathf.Lerp(0.8f, 2.0f, normalizedRPM);
         
         DrainFuel(motor);
     }
@@ -164,16 +175,12 @@ public class CarController : MonoBehaviour
     {
         float speed = rb.linearVelocity.magnitude * 3.6f;
 
-        // Always allow shifting to Neutral or Reverse
         if (newGear == 0 || newGear == 1) return true;
 
-        // Enforce sequential shifting
         if (Mathf.Abs(newGear - currentGearIndex) > 1) return false;
 
-        // Minimum speed required for each gear
-        float[] minSpeedsForGears = { 0f, 0f, 5f, 15f, 30f }; // in km/h
+        float[] minSpeedsForGears = { 0f, 0f, 0f, 25f, 55f };
 
-        // Only allow shift if speed meets requirement
         if (speed < minSpeedsForGears[newGear])
         {
             Debug.LogWarning($"Too slow to shift into {GearLabel(newGear)} (Speed: {speed:F1} km/h)");
