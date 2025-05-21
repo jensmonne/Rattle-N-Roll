@@ -29,7 +29,7 @@ public class ResetView : MonoBehaviour
     
     private void ResetHeadsetView(InputAction.CallbackContext context)
     {
-        
+        XROrigin xrorigin = GetComponent<XROrigin>();
         if (xrOrigin == null)
         {
             Debug.LogWarning("XR Origin not assigned.");
@@ -37,7 +37,7 @@ public class ResetView : MonoBehaviour
         }
 
         xrOrigin.position = target.position;
-        cameraTransform.Rotate(0, 85, 0);
+        xrorigin.MatchOriginUpOriginForward(target.up,target.forward);
         
         Debug.LogError("View has been reset");
     }
