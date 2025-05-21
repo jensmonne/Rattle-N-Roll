@@ -6,6 +6,8 @@ public class CarController : MonoBehaviour
 {
     [SerializeField] private Transform steeringWheel;
     [SerializeField] private DashBoardController dashController;
+    [SerializeField] private Rigidbody rb;
+    [SerializeField] private AnimationCurve torqueCurve;
     //[SerializeField] private AudioSource grindingAudioSource;
     //[SerializeField] private AudioClip gearGrindClip;
     
@@ -39,6 +41,11 @@ public class CarController : MonoBehaviour
     private float steerInput;
     private float accelInput;
     private float brakeInputValue;
+
+    private void Start()
+    {
+        rb = GetComponent<Rigidbody>();
+    }
     
     private void LateUpdate()
     {
@@ -154,6 +161,30 @@ public class CarController : MonoBehaviour
         dashController.SetGearMessage(GearLabel(currentGearIndex));
         Debug.Log($"Gear changed to: {GearLabel(currentGearIndex)}");
     }
+    
+    private bool IsValidGearChange(int newGear)
+    {
+        float speedKPH = rb.linearVelocity.magnitude * 3.6f;
+
+        // Always allow shifting to Neutral or Reverse
+        if (newGear == 0 || newGear == 1) return true;
+
+        // Enforce sequential shifting
+        if (Mathf.Abs(newGear - currentGearIndex) > 1) return false;
+
+        // Minimum speed required for each gear
+        float[] minSpeedsForGears = { 0f, 0f, 5f, 15f, 30f }; // in km/h
+
+        // Only allow shift if speed meets requirement
+        if (speedKPH < minSpeedsForGears[newGear])
+        {
+            Debug.LogWarning($"Too slow to shift into {GearLabel(newGear)} (Speed: {speedKPH:F1} km/h)");
+            return false;
+        }
+
+        return true;
+    }
+
 
     private string GearLabel(int index)
     {
