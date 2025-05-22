@@ -6,7 +6,7 @@ public class GameManager : MonoBehaviour
 
     public int zombieskilled;
 
-    public static int money = 10;
+    public static int Money = 20;
 
     private void Awake()
     {
@@ -24,6 +24,12 @@ public class GameManager : MonoBehaviour
     public void Addscore()
     {
         zombieskilled++;
+    }
+
+    public void GameOver()
+    {
+        Debug.Log("Game Over");
+        Money += zombieskilled/2;
     }
 
 
