@@ -29,7 +29,7 @@ public class CarController : MonoBehaviour
     [SerializeField] private WheelCollider rearRightWheel;
     
     [Header("Settings")]
-    [SerializeField] private float[] gearRatios = { 0f, -0.6f, 1.1f, 1.4f, 1.7f };
+    [SerializeField] private float[] gearRatios = { 0f, -0.6f, 1.2f, 1.4f, 1.7f };
     private readonly float[] minSpeedsForGears = { 0f, 0f, 0f, 25f, 55f }; // in km/h
     [SerializeField] private float maxMotorTorque = 1500f;
     [SerializeField] private float maxSteerAngle = 30f;
