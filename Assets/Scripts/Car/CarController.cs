@@ -81,25 +81,6 @@ public class CarController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (!Engine.isEngineRunning || isGrinding) return;
-        
-        float currentSpeedKmh = rb.linearVelocity.magnitude * 3.6f;
-        if (currentGearIndex > 1 && currentSpeedKmh < minSpeedsForGears[currentGearIndex])
-        {
-            Debug.LogWarning($"Too slow for current gear ({GearLabel(currentGearIndex)}), forcing to Neutral");
-            grindingAudioSource.clip = gearGrindClip;
-            grindingAudioSource.loop = false;
-            grindingAudioSource.Play();
-            currentGearIndex = 0;
-            dashController.SetGearMessage("Neutral");
-            return;
-        }
-        
-        float wheelRPM = (rearLeftWheel.rpm + rearRightWheel.rpm) * 0.5f;
-        float targetRPM = Mathf.Abs(wheelRPM * gearRatios[currentGearIndex] * finalDriveRatio);
-        engineRPM = Mathf.Lerp(engineRPM, targetRPM, 0.1f);
-        float normalizedRPM = Mathf.Clamp01(engineRPM / maxRPM);
-
         steerInput = steeringInput.action.ReadValue<float>();
         accelInput = accelerateInput.action.ReadValue<float>();
         brakeInputValue = brakeInput.action.ReadValue<float>();
@@ -110,21 +91,40 @@ public class CarController : MonoBehaviour
         frontLeftWheel.steerAngle = steerAngle;
         frontRightWheel.steerAngle = steerAngle;
 
-        float gearRatio = gearRatios[currentGearIndex];
-        float currentSpeed = rb.linearVelocity.magnitude;
-        float speedFactor = Mathf.Clamp01(1f - currentSpeed / 50f); // Need to tweak the last float number for top speed stuff
-        float torqueMultiplier = torqueCurve.Evaluate(normalizedRPM);
-        float motor = accelInput * maxMotorTorque * gearRatio * torqueMultiplier;
-        
-        rearLeftWheel.motorTorque = motor;
-        rearRightWheel.motorTorque = motor;
-
         float brakeForce = brakeInputValue * maxMotorTorque;
         rearLeftWheel.brakeTorque = brakeForce;
         rearRightWheel.brakeTorque = brakeForce;
-        
+
+        if (!Engine.isEngineRunning || isGrinding) return;
+
+        float currentSpeedKmh = rb.linearVelocity.magnitude * 3.6f;
+        if (currentGearIndex > 1 && currentSpeedKmh < (minSpeedsForGears[currentGearIndex] - 5))
+        {
+            Debug.LogWarning($"Too slow for current gear ({GearLabel(currentGearIndex)}), forcing to Neutral");
+            grindingAudioSource.clip = gearGrindClip;
+            grindingAudioSource.loop = false;
+            grindingAudioSource.Play();
+            currentGearIndex = 0;
+            dashController.SetGearMessage("Neutral");
+            return;
+        }
+
+        float wheelRPM = (rearLeftWheel.rpm + rearRightWheel.rpm) * 0.5f;
+        float targetRPM = Mathf.Abs(wheelRPM * gearRatios[currentGearIndex] * finalDriveRatio);
+        engineRPM = Mathf.Lerp(engineRPM, targetRPM, 0.1f);
+        float normalizedRPM = Mathf.Clamp01(engineRPM / maxRPM);
+
+        float gearRatio = gearRatios[currentGearIndex];
+        float currentSpeed = rb.linearVelocity.magnitude;
+        float speedFactor = Mathf.Clamp01(1f - currentSpeed / 50f);
+        float torqueMultiplier = torqueCurve.Evaluate(normalizedRPM);
+        float motor = accelInput * maxMotorTorque * gearRatio * torqueMultiplier;
+
+        rearLeftWheel.motorTorque = motor;
+        rearRightWheel.motorTorque = motor;
+
         engineAudioSource.pitch = Mathf.Lerp(0.8f, 2.0f, normalizedRPM);
-        
+
         DrainFuel(motor);
     }
 

@@ -32,12 +32,14 @@ public class DashBoardController : MonoBehaviour
 
     public void Update()
     {
-        // if (!Engine.isEngineRunning) return;
         
-        currentSpeed = carRigidbody.linearVelocity.magnitude * 3.6f;
-        
-        speedText.text = $"{currentSpeed:F2}";
-        
+        float speed = carRigidbody.linearVelocity.magnitude * 3.6f;
+        float direction = Vector3.Dot(carRigidbody.linearVelocity, transform.forward);
+
+        int displayedSpeed = Mathf.RoundToInt(speed);
+
+        speedText.text = direction < 0 ? $"-{displayedSpeed}" : $"{displayedSpeed}";
+
         fuelslider.value = Fuel.currentFuelAmount;
     }
 }
