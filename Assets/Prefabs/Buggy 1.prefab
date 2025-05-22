@@ -2402,8 +2402,8 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: 97b1afe4bc3d43242817ae3240b058c2, type: 3}
-  m_Resource: {fileID: 8300000, guid: 97b1afe4bc3d43242817ae3240b058c2, type: 3}
+  m_audioClip: {fileID: 8300000, guid: 3923803514facc34296d122143b84496, type: 3}
+  m_Resource: {fileID: 8300000, guid: 3923803514facc34296d122143b84496, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
@@ -3052,7 +3052,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hornButton: {fileID: 4559684020302384032, guid: b3b1a3e84de11434198c7a4e547b7340, type: 3}
   audioSource: {fileID: 1702377846300078590}
-  hornClip: {fileID: 8300000, guid: 97b1afe4bc3d43242817ae3240b058c2, type: 3}
+  hornClip: {fileID: 8300000, guid: 3923803514facc34296d122143b84496, type: 3}
 --- !u!114 &8140101301938295436
 MonoBehaviour:
   m_ObjectHideFlags: 0
