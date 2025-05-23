@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Fuel : MonoBehaviour
 {
@@ -30,7 +31,7 @@ public class Fuel : MonoBehaviour
     {
         if (rb.linearVelocity.magnitude * 3.6f <= 0.001 && currentFuelAmount <= 0)
         {
-           // DAAN AAAAAADDDDD DA LOGIK
+            SceneManager.LoadScene("Scenes/Shop");
         }
     }
 }

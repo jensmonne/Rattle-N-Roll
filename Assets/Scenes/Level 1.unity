@@ -1665,38 +1665,6 @@ PrefabInstance:
       propertyPath: fuelslider
       value: 
       objectReference: {fileID: 792789015}
-    - target: {fileID: 8148773637370465885, guid: 95f92416c44771e41999e068947308be, type: 3}
-      propertyPath: maxSteerAngle
-      value: 40
-      objectReference: {fileID: 0}
-    - target: {fileID: 8148773637370465885, guid: 95f92416c44771e41999e068947308be, type: 3}
-      propertyPath: maxMotorTorque
-      value: 1500
-      objectReference: {fileID: 0}
-    - target: {fileID: 8148773637370465885, guid: 95f92416c44771e41999e068947308be, type: 3}
-      propertyPath: maxWheelRotation
-      value: 180
-      objectReference: {fileID: 0}
-    - target: {fileID: 8148773637370465885, guid: 95f92416c44771e41999e068947308be, type: 3}
-      propertyPath: torqueCurve.m_Curve.Array.data[0].value
-      value: 0.6
-      objectReference: {fileID: 0}
-    - target: {fileID: 8148773637370465885, guid: 95f92416c44771e41999e068947308be, type: 3}
-      propertyPath: torqueCurve.m_Curve.Array.data[0].inSlope
-      value: 0.6666666
-      objectReference: {fileID: 0}
-    - target: {fileID: 8148773637370465885, guid: 95f92416c44771e41999e068947308be, type: 3}
-      propertyPath: torqueCurve.m_Curve.Array.data[1].inSlope
-      value: 0.8333333
-      objectReference: {fileID: 0}
-    - target: {fileID: 8148773637370465885, guid: 95f92416c44771e41999e068947308be, type: 3}
-      propertyPath: torqueCurve.m_Curve.Array.data[0].outSlope
-      value: 0.6666666
-      objectReference: {fileID: 0}
-    - target: {fileID: 8148773637370465885, guid: 95f92416c44771e41999e068947308be, type: 3}
-      propertyPath: torqueCurve.m_Curve.Array.data[1].outSlope
-      value: 0.8333333
-      objectReference: {fileID: 0}
     - target: {fileID: 8697093667942916299, guid: 95f92416c44771e41999e068947308be, type: 3}
       propertyPath: xrOrigin
       value: 
