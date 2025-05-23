@@ -1,10 +1,11 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 { 
     public static GameManager Instance;
 
-    public int zombieskilled;
+    public static int zombieskilled;
 
     public static int Money = 20;
 
@@ -26,10 +27,17 @@ public class GameManager : MonoBehaviour
         zombieskilled++;
     }
 
-    public void GameOver()
+    public void StartGame()
+    {
+        SceneManager.LoadScene("Level 1");
+        Fuel.SetCurrentFuelAmount();
+    }
+
+    public static void GameOver()
     {
         Debug.Log("Game Over");
         Money += zombieskilled/2;
+        SceneManager.LoadScene("Shop");
     }
 
 

@@ -6,7 +6,7 @@ public class BuyFuel : MonoBehaviour
     {
         if (GameManager.Money < 10) return;
         GameManager.Money -= 10;
-        Fuel.maxfuelAmount = +100;
+        Fuel.AddMaxFuel(100);
         Debug.Log("bought Fuel");
     }
 }

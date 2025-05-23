@@ -1,9 +1,9 @@
 using UnityEngine;
-using UnityEngine.SceneManagement;
+
 
 public class Fuel : MonoBehaviour
 {
-     public static float maxfuelAmount = 1000f;
+     public static float maxfuelAmount = 100f;
      public static float currentFuelAmount;
      [SerializeField] private Rigidbody rb;
 
@@ -31,7 +31,7 @@ public class Fuel : MonoBehaviour
     {
         if (rb.linearVelocity.magnitude * 3.6f <= 0.001 && currentFuelAmount <= 0)
         {
-            SceneManager.LoadScene("Scenes/Shop");
+            GameManager.GameOver();
         }
     }
 }
