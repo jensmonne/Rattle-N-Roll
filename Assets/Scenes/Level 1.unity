@@ -1607,7 +1607,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1702377846300078590, guid: 95f92416c44771e41999e068947308be, type: 3}
       propertyPath: m_Pitch
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2765717674746395713, guid: 95f92416c44771e41999e068947308be, type: 3}
       propertyPath: m_ForwardFriction.m_Stiffness
@@ -5316,7 +5316,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1997478957}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7a5ac11cc976e418e8d13136b07e1f52, type: 3}
   m_Name: 
