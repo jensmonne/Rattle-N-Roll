@@ -17,7 +17,7 @@ public class MenuButtons : MonoBehaviour
     /// </summary>
     public void ExitButton()
     {
-        EmergencyHandler.Instance.TriggerEmergencyStop(true);
+        Debug.Log("Exit");
     }
     
     public void OptionsButton()
