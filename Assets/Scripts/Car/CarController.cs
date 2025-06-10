@@ -50,6 +50,7 @@ public class CarController : MonoBehaviour
     
     private void LateUpdate()
     {
+        
         if (YawController.Instance() != null)
         {
             YawController.Instance().TrackerObject.transform.rotation = transform.rotation;
