@@ -2499,7 +2499,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5a487cc83036fdc4eb92d3b330c39462, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  yawIp: 10.10.30.23
+  yawIp: 10.53.3.134
 --- !u!4 &906808534
 Transform:
   m_ObjectHideFlags: 0
@@ -3669,7 +3669,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 114097211993025946, guid: b2db00cc4030f47faad8506c631645eb, type: 3}
       propertyPath: debug_ipAddress
-      value: 10.10.30.23
+      value: 10.53.3.134
       objectReference: {fileID: 0}
     - target: {fileID: 114097211993025946, guid: b2db00cc4030f47faad8506c631645eb, type: 3}
       propertyPath: referenceTransform
