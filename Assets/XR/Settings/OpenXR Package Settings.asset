@@ -52,7 +52,7 @@ MonoBehaviour:
   - {fileID: 4894107452035509726}
   - {fileID: -3005457967062904639}
   - {fileID: 1026528932420750487}
-  m_renderMode: 1
+  m_renderMode: 0
   m_autoColorSubmissionMode: 1
   m_colorSubmissionModes:
     m_List: 00000000
