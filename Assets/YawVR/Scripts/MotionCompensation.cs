@@ -19,7 +19,7 @@ namespace YawVR {
             offset.y = simData.y;
         }
 
-        private void Update()
+        private void LateUpdate()
         {
             Debug.Log($"IMU yaw: {yawController.Device.ActualPosition.yaw}");
 
